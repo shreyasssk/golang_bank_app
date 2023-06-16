@@ -13,15 +13,15 @@ type StoreCopy struct {
 }
 
 // NewStore creates a new Store
-func NewStoreCopy(db *sql.DB) *Store {
-	return &Store{
+func NewStoreCopy(db *sql.DB) Store {
+	return &SQLStore{
 		db:      db,
 		Queries: New(db),
 	}
 }
 
 // execTx executes a function withing a database transaction
-func (store *Store) execTxCopy(ctx context.Context, fn func(*Queries) error) error {
+func (store *SQLStore) execTxCopy(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ type TransferTxResultCopy struct {
 // TransferTx performs a money transfer from one account to another
 // It creates a transfer record, add account entries, and update
 // accounts within a single database transaction
-func (store *Store) TransferTxCopy(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (store *SQLStore) TransferTxCopy(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
