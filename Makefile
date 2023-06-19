@@ -28,7 +28,10 @@ test:
 server:
 	go run main.go
 
+mock:
+	mockgen -package mockdb -destination db/mock/store.go github.com/shreyasssk/golang_bank_app/db/sqlc Store
+
 mysql-login:
 	docker exec -it mysql mysql -u root -p
 
-.PHONY:	#postgres createdb dropdb migrateup migratedown migrateup1 migratedown1 test server
+.PHONY:	#postgres createdb dropdb migrateup migratedown migrateup1 migratedown1 test server mock
